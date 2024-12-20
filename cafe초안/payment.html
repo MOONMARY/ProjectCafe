@@ -75,8 +75,8 @@
         <div class="menu-item-list">
             <h4>선택한 메뉴</h4>
             <div id="selectedMenuList"></div>
-            <div class="total-price">
-                총 금액: <span id="totalAmount">0원</span>
+            <div class="total-price" id="total">
+                
             </div>
         </div>
 
@@ -87,29 +87,39 @@
 <script>
     // 결제 페이지가 로드될 때 실행
     document.addEventListener("DOMContentLoaded", () => {
-        // 세션 스토리지에서 데이터 가져오기
-        const selectedItems = JSON.parse(sessionStorage.getItem('selectedItems')) || {};
-        const totalPrice = sessionStorage.getItem('totalPrice') || 0;
+            // sessionStorage에서 데이터 불러오기
+            const selectedItems = JSON.parse(sessionStorage.getItem('selectedItems'));
+            console.log(selectedItems);
+            const totalPrice = sessionStorage.getItem('totalPrice');
+            console.log(totalPrice);
 
-        // 선택한 상품 표시
-        const itemList = document.getElementById("selectedItems");
-        for (const [name, item] of Object.entries(selectedItems)) {
-            const itemElement = document.createElement('div');
-            itemElement.className = 'selected-item';
+            const selectedItemsList = document.getElementById('selectedMenuList');
+            const totalPriceElement = document.getElementById('total');
+            
 
-            const itemName = document.createElement('span');
-            itemName.textContent = `${name} (${item.count}개)`;
+            // 선택한 항목 표시
+            for (const [name, item] of Object.entries(selectedItems)) {
+                const itemElement = document.createElement('div');
+                itemElement.className = 'selected-item';
 
-            const itemPrice = document.createElement('span');
-            itemPrice.textContent = `${item.price * item.count}원`;
+                const itemName = document.createElement('span');
+                itemName.textContent = name;
 
-            itemElement.appendChild(itemName);
-            itemElement.appendChild(itemPrice);
-            //itemList.appendChild(itemElement);
-        }
+                const itemCount = document.createElement('span');
+                itemCount.textContent = `${item.count}개`;
 
-        // 총 금액 표시
-        document.getElementById('totalPrice').textContent = `${totalPrice}원`;
+                const itemPrice = document.createElement('span');
+                itemPrice.textContent = `${item.price * item.count}원`;
+
+                itemElement.appendChild(itemName);
+                itemElement.appendChild(itemCount);
+                itemElement.appendChild(itemPrice);
+
+                selectedItemsList.appendChild(itemElement);
+            }
+
+            // 총 금액 표시
+            totalPriceElement.textContent = `${totalPrice}`;
 
         // 결제 확인 버튼 클릭 이벤트
         document.getElementById('confirmPayment').addEventListener('click', () => {
