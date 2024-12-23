@@ -44,7 +44,7 @@
 
         /* 모달 배경 */
         .modal {
-            display: none; /* 기본적으로 숨김 */
+            display: none; 
             position: fixed;
             z-index: 1;
             left: 0;
@@ -52,7 +52,7 @@
             width: 100%;
             height: 100%;
             overflow: auto;
-            background-color: rgba(0, 0, 0, 0.4); /* 반투명 배경 */
+            background-color: rgba(0, 0, 0, 0.4);
         }
 
         /* 모달 내용 */
@@ -63,14 +63,14 @@
             border: 1px solid #888;
             width: 80%;
             max-width: 400px;
-        }
+        } 
 
         /* 닫기 버튼 */
         .close {
             color: #aaa;
-            float: right;
             font-size: 28px;
             font-weight: bold;
+            margin-left: 340px;
         }
 
         .close:hover,
@@ -82,7 +82,7 @@
 
         .options {
             margin-top: 10px;
-        }
+        } 
     </style>
 </head>
 <body>
@@ -94,21 +94,21 @@
         <button>기타</button>
     </div>
     <div class="button d-flex flex-wrap justify-content-center">
-        <div class="menu-item card" onclick="addItem('복숭아 스무디', 4000)"> 
+        <div class="menu-item card" onclick="NonCoffeeOption('복숭아 스무디', 4000)"> 
             <img src="/images/smoothie.jpg" alt="복숭아 스무디" class="card-img-top">
             <div class="card-body">
                 <span class="card-title">복숭아 스무디</span>
                 <span class="card-text">4000원</span>
             </div>
         </div>
-        <div class="menu-item card" onclick="addItem('레몬에이드', 4800)">
+        <div class="menu-item card" onclick="NonCoffeeOption('레몬에이드', 4800)">
             <img src="/images/ade.jpg" alt="레몬에이드" class="card-img-top">
             <div class="card-body">
                 <span class="card-title">레몬에이드</span>
                 <span class="card-text">4800원</span>
             </div>
         </div>
-        <div class="menu-item card" onclick="addItem('아이스아메리카노', 3800)">
+        <div class="menu-item card" onclick="CoffeeOption('아이스아메리카노', 3800)">
             <img src="/images/americano.jpg" alt="아이스아메리카노" class="card-img-top">
             <div class="card-body">
                 <span class="card-title">아이스아메리카노</span>
@@ -150,28 +150,46 @@
         <button id="btn-success">결제하기</button>
     </div>
 </div>
-
-<div id="optionModal" class="modal">
+<!-- NonCoffee모달 -->
+<div id="NonCoffeeModal" class="modal">
     <div class="modal-content">
         <span class="close" id="closeModal">&times;</span>
-        <h3>옵션을 선택하세요</h3>
+        <h3>옵션 선택</h3>
         <div class="options">
-            <label>HOT</label>
-            <label>ICE</label>
+            <p>얼음</p>
+            <label><input type="radio" name="noncoffeeIce" value="달게">얼음 많이</label>
+            <label><input type="radio" name="noncoffeeIce" value="덜달게">얼음 조금</label>
         </div>
         <div class="options">
-            <label>달게</label>
-            <label><input type="radio" name="sweetness" value="덜달게"> 덜달게</label>
-            <label><input type="radio" name="sweetness" value="안달게"> 안달게</label>
+            <p>당도</p>
+            <label><input type="radio" name="sweetness" value="0">0%</label>
+            <label><input type="radio" name="sweetness" value="50">50%</label>
+            <label><input type="radio" name="sweetness" value="100">100%</label>
+        </div>
+        <button onclick="submitOptions()">선택 완료</button>
+    </div>
+</div>
+<!-- Coffee모달 -->
+<div id="CoffeeModal" class="modal">
+    <div class="modal-content">
+        <span class="close" id="closeModal">&times;</span>
+        <h3>옵션 선택</h3>
+        <div class="options">
+            <P>HOT/ICE</P>
+            <label><input type="radio" name="coffeeTemp" value="HOT"> HOT</label>
+            <label><input type="radio" name="coffeeTemp" value="ICE"> ICE</label>
+        </div>
+        <div class="options">
+            <p>얼음</p>
+            <label><input type="radio" name="coffeeIce" value="달게">얼음 많이</label>
+            <label><input type="radio" name="coffeeIce" value="덜달게">얼음 조금</label>
         </div>
         <button onclick="submitOptions()">선택 완료</button>
     </div>
 </div>
 
-
 <script>
     const selectedItems = {};
-
     function addItem(name, price) {
         if (selectedItems[name]) {
             selectedItems[name].count++;
@@ -318,48 +336,62 @@ function menuTimer() { // 60초 타이머
     }, 1000);
     console.log("첫화면");
 }
-
 function goHome() {
   window.location.href = 'cafe.html';  // 첫 페이지(홈 페이지)로 이동
 }
+// NonCoffee 클릭 시 음료 옵션 모달 띄우기
+    function NonCoffeeOption(itemName) {
+        // 모달을 띄우기 전에 선택한 음료의 이름을 저장
+        sessionStorage.setItem('selectedDrink', itemName);
+        
+        // 음료 옵션 모달을 표시
+        const modal = document.getElementById('NonCoffeeModal');
+        modal.style.display = "block";
+    }
+    // 모달 닫기
+    document.getElementById('closeModal').addEventListener('click', function() {
+        document.getElementById('NonCoffeeModal').style.display = "none";  // 모달 숨기기
+    });
+    // 옵션 선택 완료 시 처리하는 함수
+    function submitOptions() {
+        const noncoffeeIce = document.querySelector('input[name="noncoffeeIce"]:checked');
+        const sweetness = document.querySelector('input[name="sweetness"]:checked');
 
-
-        // 모달 열기
-        document.getElementById('drink').addEventListener('change', function() {
-            const drink = this.value;
-            const modal = document.getElementById('optionModal');
-            
-            if (drink) {
-                modal.style.display = "block";  // 모달 표시
-            }
-        });
-
-        // 모달 닫기
-        document.getElementById('closeModal').addEventListener('click', function() {
-            document.getElementById('optionModal').style.display = "none";  // 모달 숨기기
-        });
-
-        // 모달 밖을 클릭하면 모달 닫기
-        window.addEventListener('click', function(event) {
-            const modal = document.getElementById('optionModal');
-            if (event.target === modal) {
-                modal.style.display = "none";  // 모달 숨기기
-            }
-        });
-
-        // 옵션 선택 완료 시 출력하는 함수
-        function submitOptions() {
-            const temperature = document.querySelector('input[name="temperature"]:checked');
-            const sweetness = document.querySelector('input[name="sweetness"]:checked');
-
-            if (temperature && sweetness) {
-                alert(`선택한 음료: ${document.getElementById('drink').value}\n온도: ${temperature.value}\n단맛: ${sweetness.value}`);
-                document.getElementById('optionModal').style.display = "none";  // 모달 닫기
-            } else {
-                alert('모든 옵션을 선택해 주세요.');
-            }
+        if (noncoffeeIce && sweetness) {
+            const selectedDrink = sessionStorage.getItem('selectedDrink');
+            alert(`선택한 음료: ${selectedDrink}\n얼음: ${noncoffeeIce.value}\n당도: ${sweetness.value}`);
+            document.getElementById('NonCoffeeModal').style.display = "none";  // 모달 닫기
+        } else {
+            alert('옵션을 선택해주세요!!');
         }
+    }
 
+// Coffee 클릭 시 음료 옵션 모달 띄우기
+function CoffeeOption(itemName) {
+        // 모달을 띄우기 전에 선택한 음료의 이름을 저장
+        sessionStorage.setItem('selectedDrink', itemName);
+        
+        // 음료 옵션 모달을 표시
+        const modal = document.getElementById('CoffeeModal');
+        modal.style.display = "block";
+    }
+    // 모달 닫기
+    document.getElementById('closeModal').addEventListener('click', function() {
+        document.getElementById('CoffeeModal').style.display = "none";  // 모달 숨기기
+    });
+    // 옵션 선택 완료 시 처리하는 함수
+    function submitOptions() {
+        const coffeeTemp = document.querySelector('input[name="coffeeTemp"]:checked');
+        const coffeeIce = document.querySelector('input[name="coffeeIce"]:checked');
+
+        if (coffeeTemp && coffeeIce) {
+            const selectedDrink = sessionStorage.getItem('selectedDrink');
+            alert(`선택한 음료: ${selectedDrink}\n온도: ${coffeeTemp.value}\n얼음: ${coffeeIce.value}`);
+            document.getElementById('CoffeeModal').style.display = "none";  // 모달 닫기
+        } else {
+            alert('옵션을 선택해주세요!!');
+        }
+    }
 </script>
 
 
