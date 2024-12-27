@@ -1,0 +1,63 @@
+/* 전체적인 스타일 */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f7f7f7;
+    margin: 0;
+    padding: 0;
+}
+
+/* 결제 컨테이너 스타일 */
+.payment-container {
+    max-width: 600px;
+    margin: 30px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border: 1px solid #ddd;
+}
+
+/* 헤더 스타일 */
+h2, h4 {
+    color: #333;
+    text-align: center;
+}
+
+/* 메뉴 항목 스타일 */
+.menu-item-list {
+    margin-top: 20px;
+}
+
+.selected-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid #ddd;
+    font-size: 14px;
+    color: #333;
+}
+
+.selected-item span {
+    margin-right: 10px;
+}
+
+/* 총 금액 스타일 */
+.total-price {
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 15px;
+    text-align: right;
+    color: #333;
+}
+
+/* 액션 버튼 스타일 */
+.action-buttons {
+    display: flex;
+    flex-wrap: wrap; /* 버튼들이 3개씩 줄바꿈 되도록 설정 */
+    justify-content: space-between; /* 각 줄마다 버튼들이 균등하게 배치되도록 */
+    margin-top: 20px;
+}
+
+.action-buttons button {
+    width: 30%;
+}
