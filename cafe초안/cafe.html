@@ -157,8 +157,8 @@
         <h3>옵션 선택</h3>
         <div class="options">
             <p>얼음</p>
-            <label><input type="radio" name="noncoffeeIce" value="달게">얼음 많이</label>
-            <label><input type="radio" name="noncoffeeIce" value="덜달게">얼음 조금</label>
+            <label><input type="radio" name="noncoffeeIce" value="얼음많이">얼음 많이</label>
+            <label><input type="radio" name="noncoffeeIce" value="얼음조금">얼음 조금</label>
         </div>
         <div class="options">
             <p>당도</p>
@@ -166,7 +166,7 @@
             <label><input type="radio" name="sweetness" value="50">50%</label>
             <label><input type="radio" name="sweetness" value="100">100%</label>
         </div>
-        <button onclick="submitOptions()">선택 완료</button>
+        <button onclick="nonCoffeeSubmits()">선택 완료</button>
     </div>
 </div>
 <!-- Coffee모달 -->
@@ -181,10 +181,10 @@
         </div>
         <div class="options">
             <p>얼음</p>
-            <label><input type="radio" name="coffeeIce" value="달게">얼음 많이</label>
-            <label><input type="radio" name="coffeeIce" value="덜달게">얼음 조금</label>
+            <label><input type="radio" name="coffeeIce" value="얼음많이">얼음 많이</label>
+            <label><input type="radio" name="coffeeIce" value="얼음조금">얼음 조금</label>
         </div>
-        <button onclick="submitOptions()">선택 완료</button>
+        <button onclick="coffeeSubmits()">선택 완료</button>
     </div>
 </div>
 
@@ -323,27 +323,38 @@
     }, 1000);
     console.log("첫화면");
 }
-function menuTimer() { // 60초 타이머
-    let count = 60;
-    console.log(count);
-    let intervalId = setInterval(() => {
-        console.log(--count);
-        document.getElementById("timerbox").innerText = `${count}초 내에 결제해 주세요` // 타이머 표시
-        if (count < 0) {
-            goHome();
-            clearInterval(intervalId);
-        }
-    }, 1000);
-    console.log("첫화면");
-}
+// function menuTimer() { // 60초 타이머
+//     let count = 60;
+//     console.log(count);
+//     let intervalId = setInterval(() => {
+//         console.log(--count);
+//         document.getElementById("timerbox").innerText = `${count}초 내에 결제해 주세요` // 타이머 표시
+//         if (count < 0) {
+//             goHome();
+//             clearInterval(intervalId);
+//         }
+//     }, 1000);
+//     console.log("첫화면");
+// }
 function goHome() {
   window.location.href = 'cafe.html';  // 첫 페이지(홈 페이지)로 이동
 }
+
 // NonCoffee 클릭 시 음료 옵션 모달 띄우기
-    function NonCoffeeOption(itemName) {
-        // 모달을 띄우기 전에 선택한 음료의 이름을 저장
+    function NonCoffeeOption(itemName, price) {
+        alert("옵션모달");
+
+        // 모달을 띄우기 전에 선택한 음료의 이름, 금액을 저장
         sessionStorage.setItem('selectedDrink', itemName);
-        
+        sessionStorage.setItem('selectedDrinkPrice', price);
+        alert("음료 이름과 금액 저장됨");
+
+        //이전 음료 옵션 초기화
+        sessionStorage.removeItem('nonCoffeeOptions');
+        const radios = document.querySelectorAll('#NonCoffeeModal input[type="radio"]');
+        radios.forEach(radio => radio.checked = false);
+        alert("NonCoffee  라디오버튼/옵션 초기화 됨");
+
         // 음료 옵션 모달을 표시
         const modal = document.getElementById('NonCoffeeModal');
         modal.style.display = "block";
@@ -352,25 +363,46 @@ function goHome() {
     document.getElementById('closeModal').addEventListener('click', function() {
         document.getElementById('NonCoffeeModal').style.display = "none";  // 모달 숨기기
     });
+
     // 옵션 선택 완료 시 처리하는 함수
-    function submitOptions() {
+    function nonCoffeeSubmits() {
         const noncoffeeIce = document.querySelector('input[name="noncoffeeIce"]:checked');
         const sweetness = document.querySelector('input[name="sweetness"]:checked');
 
         if (noncoffeeIce && sweetness) {
             const selectedDrink = sessionStorage.getItem('selectedDrink');
+
+            //선택한 옵션 저장
+            const options = {
+                ice: noncoffeeIce.value,
+                sweetness: sweetness.value
+            };
+            alert("옵션 저장");
+            sessionStorage.setItem('nonCoffeeOptions', JSON.stringify(options));
+
+            //옵션 선택 시 alert창
             alert(`선택한 음료: ${selectedDrink}\n얼음: ${noncoffeeIce.value}\n당도: ${sweetness.value}`);
+            
             document.getElementById('NonCoffeeModal').style.display = "none";  // 모달 닫기
         } else {
             alert('옵션을 선택해주세요!!');
         }
     }
 
+
 // Coffee 클릭 시 음료 옵션 모달 띄우기
-function CoffeeOption(itemName) {
+function CoffeeOption(itemName, price) {
         // 모달을 띄우기 전에 선택한 음료의 이름을 저장
         sessionStorage.setItem('selectedDrink', itemName);
+        sessionStorage.setItem('selectedDrinkPrice', price);
+        alert("음료 이름과 금액 저장됨");
         
+        //이전 음료 옵션 초기화
+        sessionStorage.removeItem('CoffeeOptions');
+        const radios = document.querySelectorAll('#CoffeeModal input[type="radio"]');
+        radios.forEach(radio => radio.checked = false);
+        alert("Coffee  라디오버튼/옵션 초기화 됨");
+
         // 음료 옵션 모달을 표시
         const modal = document.getElementById('CoffeeModal');
         modal.style.display = "block";
@@ -379,13 +411,24 @@ function CoffeeOption(itemName) {
     document.getElementById('closeModal').addEventListener('click', function() {
         document.getElementById('CoffeeModal').style.display = "none";  // 모달 숨기기
     });
+
     // 옵션 선택 완료 시 처리하는 함수
-    function submitOptions() {
+    function coffeeSubmits() {
         const coffeeTemp = document.querySelector('input[name="coffeeTemp"]:checked');
         const coffeeIce = document.querySelector('input[name="coffeeIce"]:checked');
 
         if (coffeeTemp && coffeeIce) {
             const selectedDrink = sessionStorage.getItem('selectedDrink');
+
+            //선택한 옵션 저장
+            const options = {
+                temp: coffeeTemp.value,
+                ice: coffeeIce.value
+            };
+            alert("옵션 저장");
+            sessionStorage.setItem('CoffeeOptions', JSON.stringify(options));
+
+            //옵션 선택 시 alert창
             alert(`선택한 음료: ${selectedDrink}\n온도: ${coffeeTemp.value}\n얼음: ${coffeeIce.value}`);
             document.getElementById('CoffeeModal').style.display = "none";  // 모달 닫기
         } else {
