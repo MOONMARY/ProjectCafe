@@ -1,5 +1,3 @@
-import styled from "styled-components";
-import main11 from "../images/main11.mp4";
 import Header from "../home-components/Header";
 import Main from "../home-components/Main";
 import Footer from "../home-components/Footer";
@@ -30,6 +28,7 @@ function Home() {
       fetchImage(data);
     } catch (err) {
       setError(err.message);
+      console.log(error);
     }
   };
 
@@ -52,4 +51,5 @@ function Home() {
     </div>
   );
 }
+
 export default Home;

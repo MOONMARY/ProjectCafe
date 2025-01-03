@@ -1,9 +1,11 @@
+import PropTypes from "prop-types";
 import styled, { css } from "styled-components";
 
 const Container = styled.div`
   margin-top: 40px;
   width: 600px;
   height: 500px;
+  margin-left: 20px;
 `;
 // 메뉴 추가 옵션
 const AddMenuName = styled.div`
@@ -65,5 +67,9 @@ function DessertModal({ addCoffeeClick, options }) {
     </Container>
   );
 }
+DessertModal.propTypes = {
+  addCoffeeClick: PropTypes.func,
+  options: PropTypes.object,
+};
 
 export default DessertModal;
