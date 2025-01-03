@@ -318,7 +318,7 @@ function Menu() {
 
     if (count < 1) {
       clearInterval(interval.current);
-      navigate("/home");
+      navigate("/");
     }
     return () => clearInterval(interval.current);
   });
